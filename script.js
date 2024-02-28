@@ -1,9 +1,12 @@
 const users = {
-    user1: { password: 'user', balance: 0, coins: { Baselcoin: { amount: 4, price: 1.00 } } },
-    user2: { password: 'user', balance: 0, coins: { Baselcoin: { amount: 5, price: 1.00 } } },
-    user3: { password: 'user', balance: 0, coins: { Baselcoin: { amount: 10, price: 1.00 } } },
+    eins: { password: 'user', balance: 2, coins: { Baselcoin: { amount: 2, price: 1.00 } } },
+    zwei: { password: 'user', balance: 2, coins: { Baselcoin: { amount: 2, price: 1.00 } } },
+    drei: { password: 'user', balance: 2, coins: { Baselcoin: { amount: 2, price: 1.00 } } },
     admin: { password: 'admin', balance: 0, isAdmin: true }
 };
+
+// Restlicher Code bleibt unverändert
+
 
 const logMessages = [];
 
@@ -19,6 +22,13 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+
+    // Überprüfung, ob der Benutzername und das Passwort nur Buchstaben enthalten
+    if (!isValidInput(username) || !isValidInput(password)) {
+        alert('Ungültige Zeichen im Benutzernamen oder Passwort. Bitte verwenden Sie nur Buchstaben.');
+        return;
+    }
+
     const loginContainer = document.querySelector('.login-container');
     const balanceContainer = document.getElementById('balanceContainer');
     const userNameElement = document.getElementById('userName');
@@ -52,7 +62,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
             addUserButton.style.display = 'block';
         } else {
             const coinName = 'Baselcoin';
-            const coinData = { amount: 1, price: 1.00 };
+            const coinData = { amount: 3, price: 1.00 };
             const tableRow = `<tr>
                                 <td>${coinName}</td>
                                 <td>${coinData.amount}</td>
@@ -80,6 +90,12 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
 document.getElementById('createUser').addEventListener('click', function() {
     const newUsername = document.getElementById('newUsername').value;
     const newPassword = document.getElementById('newPassword').value;
+
+    // Überprüfung, ob der Benutzername und das Passwort nur Buchstaben enthalten
+    if (!isValidInput(newUsername) || !isValidInput(newPassword)) {
+        alert('Ungültige Zeichen im Benutzernamen oder Passwort. Bitte verwenden Sie nur Buchstaben.');
+        return;
+    }
 
     if (users[newUsername]) {
         alert('Benutzername bereits vergeben. Bitte wählen Sie einen anderen.');
@@ -138,6 +154,12 @@ function logout() {
     clearTimeout(inactivityTimer);
     document.getElementById('loginContainer').style.display = 'block';
     document.getElementById('balanceContainer').style.display = 'none';
+}
+
+// Funktion zum Überprüfen, ob der Text nur Buchstaben enthält
+function isValidInput(text) {
+    const regex = /^[a-zA-Z]+$/;
+    return regex.test(text);
 }
 
 const authenticatedUsername = 'tatsächlicherBenutzername';
