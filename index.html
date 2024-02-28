@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Fenster</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <form id="loginForm">
+            <label for="username">Benutzername:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Passwort:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Einloggen</button>
+        </form>
+    </div>
+    <!-- Kontostand und Coins-Anzeige (zunächst versteckt) -->
+    <div id="balanceContainer" style="display: none;">
+        <h2><span id="userName"></span>'s Kontostand</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name des Coins|      </th>
+                    <th>Aktuelle Anzahl von Coins|      </th>
+                    <th>Preis pro Coin|     </th>
+                    <th>Kontostand</th>
+                </tr>
+            </thead>
+            <tbody id="coinsTableBody"></tbody>
+        </table>
+        <form id="adminForm" style="display: none;"> <!-- Formular für Admin, initial ausgeblendet -->
+            <h3>Neuen Benutzer anlegen</h3>
+            <label for="newUsername">Benutzername:</label>
+            <input type="text" id="newUsername" name="newUsername" required>
+            <label for="newPassword">Passwort:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+            <button type="button" id="createUser">Benutzer anlegen</button>
+        </form>
+        <button id="logout">Abmelden</button>
+       
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
