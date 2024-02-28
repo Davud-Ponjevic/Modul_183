@@ -5,6 +5,15 @@ const users = {
     admin: { password: 'admin', balance: 0, isAdmin: true }
 };
 
+const logMessages = [];
+
+function logEvent(eventType, username, action) {
+    const timestamp = new Date().toLocaleString();
+    const logMessage = `${timestamp} - ${eventType} - Benutzer: ${username} - Aktion: ${action}`;
+    logMessages.push(logMessage);
+    console.log(logMessage);
+}
+
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -14,28 +23,24 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const balanceContainer = document.getElementById('balanceContainer');
     const userNameElement = document.getElementById('userName');
     const coinsTableBody = document.getElementById('coinsTableBody');
-    const adminForm = document.getElementById('adminForm'); // Neues Element für das Admin-Formular hinzugefügt
-    const addUserButton = document.getElementById('addUser'); // Neuer Button für "Neuen Benutzer anlegen"
+    const adminForm = document.getElementById('adminForm');
+    const addUserButton = document.getElementById('addUser');
 
-    // Logout-Button Funktionalität für den Admin-Bereich
     document.getElementById('logout').addEventListener('click', function() {
         loginContainer.style.display = 'block';
         balanceContainer.style.display = 'none';
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
-        adminForm.style.display = 'none'; // Verstecke das Admin-Formular beim Abmelden
-        addUserButton.style.display = 'none'; // Verstecke den "Neuen Benutzer anlegen"-Button beim Abmelden
+        adminForm.style.display = 'none';
+        addUserButton.style.display = 'none';
     });
 
-    // Überprüfung, ob der Benutzer existiert und das Passwort korrekt ist
     if (users[username] && users[username].password === password) {
         loginContainer.style.display = 'none';
         balanceContainer.style.display = 'block';
-        userNameElement.textContent = username; // Setze den Namen des Benutzers
+        userNameElement.textContent = username;
 
-        // Fülle die Tabelle mit den Coin-Daten
         if (users[username].isAdmin) {
-            // Wenn der Benutzer ein Admin ist, zeige nur den Kontostand an
             let balances = 'Kontostände:\n';
             for (const user in users) {
                 if (!users[user].isAdmin) {
@@ -43,12 +48,11 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
                 }
             }
             coinsTableBody.innerHTML = `<tr><td colspan="4">${balances.replace(/\n/g, '<br>')}</td></tr>`;
-            adminForm.style.display = 'block'; // Zeige das Admin-Formular an
-            addUserButton.style.display = 'block'; // Zeige den "Neuen Benutzer anlegen"-Button für Admin an
+            adminForm.style.display = 'block';
+            addUserButton.style.display = 'block';
         } else {
-            // Fülle die Tabelle mit den Coin-Daten für den normalen Benutzer (Annahme: Nur Baselcoin existiert)
             const coinName = 'Baselcoin';
-            const coinData = { amount: 1, price: 1.00 }; // Annahme: Ein Benutzer hat immer einen Baselcoin mit einer Anzahl von 1 und einem Preis von 1.00
+            const coinData = { amount: 1, price: 1.00 };
             const tableRow = `<tr>
                                 <td>${coinName}</td>
                                 <td>${coinData.amount}</td>
@@ -56,34 +60,30 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
                                 <td>${(coinData.amount * coinData.price).toFixed(2)}</td>
                               </tr>`;
             coinsTableBody.innerHTML = tableRow;
-            adminForm.style.display = 'none'; // Verstecke das Admin-Formular
-            addUserButton.style.display = 'none'; // Verstecke den "Neuen Benutzer anlegen"-Button für normale Benutzer
+            adminForm.style.display = 'none';
+            addUserButton.style.display = 'none';
         }
     } else {
         alert('Ungültiger Benutzername oder Passwort.');
     }
 
-    // Logout-Button Funktionalität für den normalen Benutzer-Bereich
     document.getElementById('logout').addEventListener('click', function() {
         loginContainer.style.display = 'block';
         balanceContainer.style.display = 'none';
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
-        adminForm.style.display = 'none'; // Verstecke das Admin-Formular beim Abmelden
-        addUserButton.style.display = 'none'; // Verstecke den "Neuen Benutzer anlegen"-Button beim Abmelden
+        adminForm.style.display = 'none';
+        addUserButton.style.display = 'none';
     });
 });
 
-// Event Listener für den "Benutzer anlegen"-Button
 document.getElementById('createUser').addEventListener('click', function() {
     const newUsername = document.getElementById('newUsername').value;
     const newPassword = document.getElementById('newPassword').value;
 
-    // Überprüfe, ob der Benutzername bereits existiert
     if (users[newUsername]) {
         alert('Benutzername bereits vergeben. Bitte wählen Sie einen anderen.');
     } else {
-        // Füge neuen Benutzer hinzu und gebe ihm 2 Baselcoins
         const coinName = 'Baselcoin';
         const initialAmount = 2;
         const pricePerCoin = 1.00;
@@ -98,12 +98,10 @@ document.getElementById('createUser').addEventListener('click', function() {
 
         alert(`Benutzer ${newUsername} wurde erfolgreich angelegt.`);
 
-        // Manuelle Anmeldung mit dem neuen Benutzer
         loginContainer.style.display = 'none';
         balanceContainer.style.display = 'block';
-        userNameElement.textContent = newUsername; // Setze den Namen des neuen Benutzers
+        userNameElement.textContent = newUsername;
 
-        // Fülle die Tabelle mit den Coin-Daten für den normalen Benutzer
         const coinData = users[newUsername].coins[coinName];
         const tableRow = `<tr>
                             <td>${coinName}</td>
@@ -112,51 +110,36 @@ document.getElementById('createUser').addEventListener('click', function() {
                             <td>${(coinData.amount * coinData.price).toFixed(2)}</td>
                           </tr>`;
         coinsTableBody.innerHTML = tableRow;
-        adminForm.style.display = 'none'; // Verstecke das Admin-Formular
-        addUserButton.style.display = 'none'; // Verstecke den "Neuen Benutzer anlegen"-Button für normale Benutzer
+        adminForm.style.display = 'none';
+        addUserButton.style.display = 'none';
     }
+});
 
-const sessionTimeout = 1 * 60 * 1000; // 1 Minuten in Millisekunden
-let idleTimeout; // Variable zur Speicherung des Idle-Timeout-Timers
-let absoluteTimeout; // Variable zur Speicherung des absoluten Timeout-Timers
+const inactivityTimeout = 1 * 60 * 1000;
+let inactivityTimer;
 
-function startSession() {
-    // Setze den Idle-Timeout-Timer beim Start der Sitzung
-    idleTimeout = setTimeout(logout, sessionTimeout);
-
-    // Setze den absoluten Timeout-Timer
-    absoluteTimeout = setTimeout(logout, sessionTimeout + sessionTimeout); // Absolute Zeitüberschreitung nach doppelter Sitzungszeit
+function startInactivityTimer() {
+    inactivityTimer = setTimeout(() => {
+        logEvent('INACTIVITY_TIMEOUT', currentUsername, 'Inaktivität - automatischer Logout');
+        logout();
+    }, inactivityTimeout);
 }
 
-function resetSession() {
-    // Wenn der Benutzer aktiv ist, setze den Idle-Timeout zurück
-    clearTimeout(idleTimeout);
-    
-    // Setze den Idle-Timeout-Timer erneut
-    idleTimeout = setTimeout(logout, sessionTimeout);
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    startInactivityTimer();
 }
+
+document.addEventListener('mousemove', () => resetInactivityTimer());
+document.addEventListener('keypress', () => resetInactivityTimer());
 
 function logout() {
-    // Hier kannst du die Aktionen für den Logout durchführen
-    alert('Sitzung abgelaufen. Bitte erneut einloggen.');
-    
-    // Führe hier die Aktionen für den Logout durch, z.B. zurück zum Anmeldebildschirm
-    // ...
-
-    // Zurücksetzen der Timer und Anzeige des Anmeldebildschirms
-    clearTimeout(idleTimeout);
-    clearTimeout(absoluteTimeout);
+    logEvent('LOGOUT', currentUsername, 'Benutzer abgemeldet');
+    clearTimeout(inactivityTimer);
     document.getElementById('loginContainer').style.display = 'block';
     document.getElementById('balanceContainer').style.display = 'none';
 }
 
-// Füge Event Listener hinzu, um die Sitzung bei Benutzeraktivität zurückzusetzen
-document.addEventListener('mousemove', resetSession);
-document.addEventListener('keypress', resetSession);
-
-// Starte die Sitzung beim Laden der Seite
-startSession();
-
-});
-
-// ...
+const authenticatedUsername = 'tatsächlicherBenutzername';
+startSession(authenticatedUsername);
+startInactivityTimer();
