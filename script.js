@@ -29,6 +29,12 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         return;
     }
 
+// Funktion zum Überprüfen, ob der Text nur Buchstaben enthält
+function isValidInput(text) {
+    const regex = /^[a-zA-Z]+$/;
+    return regex.test(text);
+}
+
     const loginContainer = document.querySelector('.login-container');
     const balanceContainer = document.getElementById('balanceContainer');
     const userNameElement = document.getElementById('userName');
@@ -131,7 +137,7 @@ document.getElementById('createUser').addEventListener('click', function() {
     }
 });
 
-const inactivityTimeout = 1 * 60 * 1000;
+const inactivityTimeout = 5 * 60 * 1000;
 let inactivityTimer;
 
 function startInactivityTimer() {
@@ -156,11 +162,7 @@ function logout() {
     document.getElementById('balanceContainer').style.display = 'none';
 }
 
-// Funktion zum Überprüfen, ob der Text nur Buchstaben enthält
-function isValidInput(text) {
-    const regex = /^[a-zA-Z]+$/;
-    return regex.test(text);
-}
+
 
 const authenticatedUsername = 'tatsächlicherBenutzername';
 startSession(authenticatedUsername);
